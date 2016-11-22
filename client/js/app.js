@@ -1,4 +1,4 @@
-var app = angular.module('stubby', ['ngRoutes','ngResource', 'ngAnimate', 'ngCookies'])
+var app = angular.module('stubby', ['ngRoute','ngResource', 'ngAnimate', 'ngCookies'])
 
 app.config(function($routeProvider) {
     $routeProvider
