@@ -14,15 +14,15 @@ app.config(function($routeProvider) {
             templateUrl: '../views/login.html',
             controller: 'UserController'
         })
-        .when('/profile:id', {
-          templateUrl: '../views/oneprofile.html',
+        .when('/profile/:id', {
+          templateUrl: '../views/profile.html',
           controller: 'ProfileController'
         })
         .when('/creategame', {
           templateUrl: '../views/creategame.html',
           controller: 'GameController'
         })
-        .when('/scorecard:id', {
+        .when('/scorecard/:id', {
           templateUrl: '../views/scorecard.html',
           controller: 'ScoreController'
         })
