@@ -13,7 +13,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var configAuth = require('./config.js');
-
+var db = require('./db/api')
 
 var api = require('./routes/api');
 var userapi = require('./routes/userapi');
@@ -24,7 +24,9 @@ var app = express();
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../client')));
 
@@ -35,8 +37,18 @@ app.use(passport.initialize());
 app.use(cookieSession({
     name: 'stubbypencilscoring',
     secret: process.env.SESSION_SECRET,
-    secureProxy: app.get('env') === 'production'
+    secure: app.get('env') === 'production'
 }));
+
+app.get('/auth/facebook', passport.authenticate('facebook', {
+    scope: ['email']
+}));
+
+app.get('/auth/callback/facebook',
+    passport.authenticate('facebook', {
+        successRedirect: '/#/profile',
+        failureRedirect: '/#/login'
+    }));
 
 passport.use(new FacebookStrategy({
         clientID: configAuth.clientID,
@@ -47,12 +59,15 @@ passport.use(new FacebookStrategy({
         passReqToCallback: true
     },
 
-    function(req, accessToken, refreshToken, profile, cb1) {
+    function(req, accessToken, refreshToken, profile, done) {
+        console.log('Auth done');
         db.createOrLogin(profile, (err, user) => {
             req.session.userInfo = user;
-            return cb1(null, user);
+            console.log('req.session.userInfo:', req.session.userInfo);
+            return done(null, user);
         });
     }
+
 ))
 
 passport.serializeUser(function(user, done) {

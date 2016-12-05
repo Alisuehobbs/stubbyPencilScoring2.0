@@ -1,8 +1,3 @@
-app.controller('UserController', function($scope, userService) {
+app.controller('UserController', function($scope) {
 
-    $scope.facebookAuth = function () {
-      console.log('I was clicked');
-      userService.authenticate()
-      userService.token()
-    }
 })
