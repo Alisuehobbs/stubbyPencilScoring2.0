@@ -2,6 +2,11 @@
  background-color: #cf0f0f;
 }
 
+.error {
+  color: red;
+  font-size: 25px;
+}
+
 .background {
     background-image: url('http://a.espncdn.com/photo/2010/0512/trav_fenwayscoreboard1_800.jpg');
     background-position: bottom ;

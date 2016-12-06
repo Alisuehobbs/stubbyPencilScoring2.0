@@ -20,6 +20,14 @@ var userapi = require('./routes/userapi');
 
 var app = express();
 
+app.use(cookieParser());
+app.use(cookieSession({
+  name: 'stubbypencilscoring',
+  secret: process.env.SESSION_SECRET,
+  secure: app.get('env') === 'production'
+}));
+
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -27,18 +35,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../client')));
 
 app.use('/api', api);
 app.use('/userapi', userapi);
 
 app.use(passport.initialize());
-app.use(cookieSession({
-    name: 'stubbypencilscoring',
-    secret: process.env.SESSION_SECRET,
-    secure: app.get('env') === 'production'
-}));
 
 app.get('/auth/facebook', passport.authenticate('facebook', {
     scope: ['email']
@@ -60,10 +62,8 @@ passport.use(new FacebookStrategy({
     },
 
     function(req, accessToken, refreshToken, profile, done) {
-        console.log('Auth done');
         db.createOrLogin(profile, (err, user) => {
             req.session.userInfo = user;
-            console.log('req.session.userInfo:', req.session.userInfo);
             return done(null, user);
         });
     }
