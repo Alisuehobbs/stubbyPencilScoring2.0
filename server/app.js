@@ -16,7 +16,8 @@ var configAuth = require('./config.js');
 var db = require('./db/api')
 
 var api = require('./routes/api');
-var userapi = require('./routes/userapi');
+var signupapi = require('./routes/signupapi');
+var loginapi = require('./routes/loginapi');
 
 var app = express();
 
@@ -27,7 +28,6 @@ app.use(cookieSession({
   secure: app.get('env') === 'production'
 }));
 
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -37,10 +37,11 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static(path.join(__dirname, '../client')));
 
-app.use('/api', api);
-app.use('/userapi', userapi);
-
 app.use(passport.initialize());
+
+app.use('/api', api);
+app.use('/signupapi', signupapi);
+app.use('/loginapi', loginapi);
 
 app.get('/auth/facebook', passport.authenticate('facebook', {
     scope: ['email']

@@ -1,8 +1,8 @@
-app.controller('UserController', function($scope, UserService, $location) {
+app.controller('UserController', function($scope, AllServices, $location) {
 
     $scope.submitSignUp = function(newUser) {
         newUser.type = 'local'
-        UserService.register.save(newUser, function(returnedData) {
+        AllServices.signUp(newUser).success(function(returnedData) {
           const user = returnedData[0]
             if (user.length == undefined) {
                 $scope.newUser = {}
@@ -12,6 +12,13 @@ app.controller('UserController', function($scope, UserService, $location) {
             $scope.error = returnedData[0]
           }
         })
+    }
+
+    $scope.submitLogIn = function (returningUser) {
+      console.log("returningUser:", returningUser);
+      UserService.login.save(returningUser, function(data) {
+        console.log('data:', data);
+      })
     }
 
 })
