@@ -5,5 +5,9 @@ app.factory('AllServices', function($http) {
     return $http.post('/signupapi', data)
   }
 
+  service.login = function(data) {
+    return $http.post('/loginapi', data)
+  }
+
   return service
 });

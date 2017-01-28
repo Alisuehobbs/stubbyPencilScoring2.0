@@ -15,9 +15,14 @@ app.controller('UserController', function($scope, AllServices, $location) {
     }
 
     $scope.submitLogIn = function (returningUser) {
-      console.log("returningUser:", returningUser);
-      UserService.login.save(returningUser, function(data) {
-        console.log('data:', data);
+      AllServices.login(returningUser).success(function(returnedData) {
+        if (returnedData.length == undefined) {
+          $scope.returningUser = {}
+          $scope.logIn.$setPristine()
+          $location.url('/profile')
+        } else {
+          $scope.error = returnedData
+        }
       })
     }
 
